@@ -94,10 +94,25 @@
     [self retrieveReceiptData:call result:result];
   } else if ([@"-[InAppPurchasePlugin refreshReceipt:result:]" isEqualToString:call.method]) {
     [self refreshReceipt:call result:result];
-  } else {
+  } else if([@"-[SKPaymentQueue getUndealPurchases:]" isEqualToString:call.method]){
+      [self getUndealPurchases:result];
+  } else{
     result(FlutterMethodNotImplemented);
   }
 }
+
+- (void)getUndealPurchases:(FlutterResult)result {
+
+    NSMutableArray *maps = [NSMutableArray new];
+    for (SKPaymentTransaction *transaction in [SKPaymentQueue defaultQueue].transactions) {
+        if (transaction.transactionState == SKPaymentTransactionStatePurchased) {
+            [maps addObject:[FIAObjectTranslator getMapFromSKPaymentTransaction:transaction]];
+        }
+
+    }
+    result(maps);
+}
+
 
 - (void)canMakePayments:(FlutterResult)result {
   result([NSNumber numberWithBool:[SKPaymentQueue canMakePayments]]);

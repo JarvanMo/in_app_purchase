@@ -204,6 +204,9 @@ abstract class InAppPurchaseConnection {
   Future<QueryPurchaseDetailsResponse> queryPastPurchases(
       {String applicationUserName});
 
+  Future<List<PurchaseDetails>> getUndealPurchases();
+
+
   /// (App Store only) retry loading purchase data after an initial failure.
   ///
   /// Throws an [UnsupportedError] on Android.
